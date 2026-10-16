@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>All Students | StudentHub</title><link rel="stylesheet" href="styles.css"></head><body class="dashboard-layout">
+<aside class="sidebar">
+  <a class="side-brand" href="index.html"><span class="side-logo">🎓</span><span><strong>Student<span>Hub</span></strong><small>Learn · Grow · Succeed</small></span></a>
+  <nav class="side-nav" aria-label="Student management navigation">
+    <a href="index.html" data-page="index.html"><span>⌂</span> Dashboard</a>
+    <a href="insert.html" data-page="insert.html"><span>＋</span> Insert Student</a>
+    <a href="listOne.html" data-page="listOne.html"><span>♙</span> View Student</a>
+    <a href="update.html" data-page="update.html"><span>✎</span> Update Student</a>
+    <a href="delete.html" data-page="delete.html"><span>▤</span> Delete Student</a>
+    <a href="list.html" data-page="list.html"><span>☷</span> List Students</a>
+  </nav>
+  <div class="sidebar-quote">“Small steps<br>today build<br>big dreams<br>tomorrow.” <span>♡</span></div>
+  <div class="side-college"><span>🏛️</span><div>Tejaswi College<small>· Kurnool</small></div></div>
+</aside>
+<main class="dashboard-main">
+<header class="dashboard-top"><span>Student Management System</span><span class="admin-pill"><span class="admin-avatar">●</span> Admin⌄</span></header>
+<section class="welcome-hero"><div><p class="script-welcome">Welcome to</p><h1>StudentHub</h1><h2>📋 All Students</h2><p class="hero-sub">🎓 Manage Students&nbsp; • &nbsp;Keep Records&nbsp; • &nbsp;Build a Better Future</p></div><div class="hero-quote">Education is the key to<br> success <span>♡</span><div class="hero-cap">🎓</div></div></section>
+<main class="container"><section class="page-heading"><div><p class="eyebrow">STUDENT RECORDS / OVERVIEW</p><p>View all records saved in your school database.</p></div><a class="btn btn-primary" href="insert.html">➕ Add Student</a></section><section class="card"><div class="button-row" style="justify-content:space-between;margin-bottom:18px"><span class="subtle" id="countLabel">Loading student records...</span><button class="btn btn-secondary" onclick="loadStudents()">↻ Refresh List</button></div><div id="notice" class="notice" role="status"></div><div class="table-wrap"><table><caption>🎓 Student Register</caption><thead><tr><th scope="col">Student No (sno)</th><th scope="col">Student Name</th><th scope="col">Total Marks</th></tr></thead><tbody id="studentRows"><tr><td colspan="3" class="empty">Loading...</td></tr></tbody></table></div></section><script>async function loadStudents(){const body=document.getElementById('studentRows'),count=document.getElementById('countLabel');body.replaceChildren();try{const r=await fetch('/students');if(!r.ok)throw Error(await r.text());const data=await r.json();count.textContent=data.length+' student record(s) found';if(!data.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=3;td.className='empty';td.textContent='👨‍🎓 No students found. Add your first student!';tr.append(td);body.append(tr);return}data.forEach(s=>{const tr=document.createElement('tr');[s.sno,s.Name,s.Total].forEach(v=>{const td=document.createElement('td');td.textContent=v??'—';tr.append(td)});body.append(tr)})}catch(e){count.textContent='Could not load records';const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=3;td.className='empty';td.textContent='Error: '+e.message;tr.append(td);body.append(tr)}}loadStudents()</script></main></main>
+
+</main>
+<script>document.querySelectorAll(".side-nav a").forEach(a=>{if(a.dataset.page===location.pathname.split("/").pop()){a.classList.add("side-active")}else{a.classList.remove("side-active")}});</script>
+</body></html>

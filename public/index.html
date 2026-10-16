@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudentHub | Student Management System</title><link rel="stylesheet" href="styles.css">
+</head>
+<body class="dashboard-layout">
+<aside class="sidebar">
+  <a class="side-brand" href="index.html"><span class="side-logo">🎓</span><span><strong>Student<span>Hub</span></strong><small>Learn · Grow · Succeed</small></span></a>
+  <nav class="side-nav" aria-label="Student management navigation">
+    <a class="side-active" href="index.html"><span>⌂</span> Dashboard</a>
+    <a href="insert.html"><span>＋</span> Insert Student</a>
+    <a href="listOne.html"><span>♙</span> View Student</a>
+    <a href="update.html"><span>✎</span> Update Student</a>
+    <a href="delete.html"><span>▤</span> Delete Student</a>
+    <a href="list.html"><span>☷</span> List Students</a>
+  </nav>
+  <div class="sidebar-quote">“Small steps<br>today build<br>big dreams<br>tomorrow.” <span>♡</span></div>
+  <div class="side-college"><span>🏛️</span><div> Tejaswi College<small> · Kurnool</small></div></div>
+</aside>
+<main class="dashboard-main">
+  <header class="dashboard-top"><span>Student Management System</span><span class="admin-pill"><span class="admin-avatar">●</span> Admin⌄</span></header>
+  <section class="welcome-hero"><div><p class="script-welcome">Welcome to</p><h1>StudentHub</h1><h2>Student Management System</h2><p class="hero-sub">🔹 Manage Students&nbsp; • &nbsp;Keep Records&nbsp; • &nbsp;Build a Better Future</p></div><div class="hero-quote">Education is the key to<br> success <span>♡</span><div class="hero-cap">🎓</div></div></section>
+  <section class="dashboard-stats">
+    <article class="dash-stat stat-blue"><div class="dash-stat-icon">👥</div><div><span>Total Students</span><strong id="studentCount">—</strong><small>Registered in Database</small></div><span class="stat-watermark">♙</span></article>
+    <article class="dash-stat stat-purple"><div class="dash-stat-icon">▤</div><div><span>Total Records</span><strong id="recordCount">—</strong><small>Student Information</small></div><span class="stat-watermark">▤</span></article>
+    <article class="dash-stat stat-teal"><div class="dash-stat-icon">▤</div><div><span>Database</span><strong>MySQL</strong><small>● Connected via server</small></div><span class="stat-watermark">▤</span></article>
+  </section>
+  <section class="student-panel">
+    <div class="student-panel-main"><div class="panel-heading"><span class="panel-user-icon">♟</span><div><h3>Student Details</h3><p>Select a student number from the dropdown to view the student details.</p></div></div>
+      <form id="studentLookup"><label for="studentSno">Student No (sno)</label><select id="studentSno" required><option value="">-- Select Student No --</option></select>
+      <div class="student-detail-cards"><article class="student-detail name-detail"><span class="detail-icon">♟</span><div><small>Student Name</small><strong id="studentName">--</strong></div></article><article class="student-detail total-detail"><span class="detail-icon">📖</span><div><small>Total</small><strong id="studentTotal">--</strong></div></article></div>
+      <button type="submit" class="view-details-btn">⌕ &nbsp; View Student Details</button><p id="lookupMessage" class="lookup-message" role="status"></p></form>
+    </div>
+    <div class="panel-art"><div class="line-cap">◇</div><p>Better<br>Students<br>Brighter<br>Future <span>♡</span></p><div class="campus-mini">🏫</div></div>
+  </section>
+  <section class="feature-strip"><div><span>ϟ</span><p><strong>Fast & Reliable</strong><small>Quick operations with MySQL.</small></p></div><div><span>♢</span><p><strong>Secure</strong><small>Your data, our priority.</small></p></div><div><span>▣</span><p><strong>Responsive Design</strong><small>Works on all devices.</small></p></div><div><span>♡</span><p><strong>Made with ♥</strong><small>For better learning.</small></p></div></section>
+  <footer class="dashboard-footer">ℹ️ &nbsp; StudentHub · Student records made simple. All records are fetched from your MySQL database.</footer>
+</main>
+<script>
+const snoSelect=document.getElementById('studentSno');
+const nameOut=document.getElementById('studentName');
+const totalOut=document.getElementById('studentTotal');
+const message=document.getElementById('lookupMessage');
+fetch('/students').then(r=>{if(!r.ok)throw Error('Could not load student records');return r.json()}).then(rows=>{
+ document.getElementById('studentCount').textContent=rows.length;
+ document.getElementById('recordCount').textContent=rows.length;
+ rows.forEach(s=>{const o=document.createElement('option');o.value=s.sno;o.textContent=s.sno;snoSelect.appendChild(o)});
+}).catch(()=>{document.getElementById('studentCount').textContent='!';document.getElementById('recordCount').textContent='!';message.textContent='Could not load students. Check that the server and MySQL are running.';});
+async function loadStudent(){const sno=snoSelect.value;if(!sno){nameOut.textContent='--';totalOut.textContent='--';return}try{const r=await fetch('/students/'+encodeURIComponent(sno));const rows=await r.json();if(!r.ok)throw Error(rows.error||'Unable to fetch student');const s=rows[0];if(!s){nameOut.textContent='Not found';totalOut.textContent='--';return}nameOut.textContent=s.Name;totalOut.textContent=s.Total;message.textContent='Student details loaded successfully.'}catch(e){message.textContent='Unable to load student details.'}}
+snoSelect.addEventListener('change',loadStudent);document.getElementById('studentLookup').addEventListener('submit',e=>{e.preventDefault();loadStudent()});
+</script>
+</body></html>
